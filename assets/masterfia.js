@@ -48,8 +48,8 @@ function saveField(id, value) {
 }
 
 function extractAIDecision(value) {
-  const match = String(value || '').match(/DECISI[ÓO]N\s*:\s*(APTO|REVISAR)\b/i);
-  return match ? match[1].toUpperCase() : '';
+  const matches = [...String(value || '').matchAll(/DECISI[ÓO]N\s*:\s*(APTO|REVISAR)\b/gi)];
+  return matches.length ? matches[matches.length - 1][1].toUpperCase() : '';
 }
 
 function updateProgress() {
