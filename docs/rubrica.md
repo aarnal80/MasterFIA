@@ -15,3 +15,7 @@ Cada dimensión recibe de 0 a 4 puntos. Puntuación máxima: 20.
 - Trabajo destacado: 17/20 o más, sin ninguna dimensión por debajo de 3.
 
 La evaluación debe terminar siempre con una fortaleza, una afirmación que necesite más apoyo, una revisión prioritaria y una pregunta nueva.
+
+## Veredicto del tribunal de IA
+
+La conversación final debe terminar con una línea exacta: `DECISIÓN: APTO` o `DECISIÓN: REVISAR`. La página solo registra un código piloto cuando el veredicto es `APTO` y se han conservado el ensayo y la conversación completa. El código no sustituye todavía una certificación con identidad verificada.

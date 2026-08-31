@@ -6,7 +6,7 @@ MasterFIA es un programa online, abierto y estructurado de filosofía, con una e
 
 - Módulo 1 publicado como piloto: **¿Qué significa vivir una vida examinada?**
 - Duración: una semana, 6–8 horas.
-- Método: pregunta central, vídeo, lectura filosófica, literatura, diálogo guiado con ChatGPT y ensayo breve.
+- Método del módulo 1: pregunta central, audiolibro o lectura filosófica, literatura, dos conversaciones guiadas con ChatGPT y ensayo defendido ante la IA.
 - Desbloqueo actual: piloto local en el navegador. La validación segura con cuenta, servidor y código personal queda preparada como siguiente fase.
 
 ## Abrir el piloto
