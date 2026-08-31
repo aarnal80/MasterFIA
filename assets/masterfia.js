@@ -37,7 +37,7 @@ const essayPromptText = [
 ].join('\n');
 
 const storageKey = 'masterfia:modulo1';
-const fields = ['diagnostic', 'argument-map', 'dialogue-reflection', 'tolstoi-notes', 'tolstoi-discussion', 'final-essay', 'ai-declaration', 'ai-verdict'];
+const fields = ['argument-map', 'dialogue-reflection', 'tolstoi-notes', 'tolstoi-discussion', 'final-essay', 'ai-declaration', 'ai-verdict'];
 let state = {};
 try { state = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch { state = {}; }
 
@@ -54,7 +54,7 @@ function extractAIDecision(value) {
 
 function updateProgress() {
   const evidence = [
-    Boolean((state.diagnostic || '').trim()),
+    Boolean(state.thinkingDone),
     Boolean((state['argument-map'] || '').trim()),
     Boolean((state['dialogue-reflection'] || '').trim() && state.chatEvidence),
     Boolean((state['tolstoi-notes'] || '').trim() && (state['tolstoi-discussion'] || '').trim()),
@@ -121,6 +121,7 @@ function hydrate() {
     element.addEventListener('input', () => saveField(id, element.value));
   });
   bindCheckbox('chat-evidence', 'chatEvidence');
+  bindCheckbox('thinking-done', 'thinkingDone');
   bindCheckbox('ai-verdict-evidence', 'aiVerdictEvidence');
   const prompt = document.getElementById('prompt-text');
   if (prompt) prompt.textContent = dialoguePromptText;
@@ -144,8 +145,9 @@ function validateModule() {
   const verdict = (state['ai-verdict'] || '').trim();
   const aiDecision = extractAIDecision(verdict);
   const evidence = Boolean(state.chatEvidence);
+  const thinkingDone = Boolean(state.thinkingDone);
   const verdictEvidence = Boolean(state.aiVerdictEvidence);
-  if (score >= 4 && reflection.length >= 80 && tolstoiNotes.length >= 120 && tolstoiDiscussion.length >= 80 && essay.length >= 300 && evidence && verdictEvidence && aiDecision === 'APTO') {
+  if (score >= 4 && thinkingDone && reflection.length >= 80 && tolstoiNotes.length >= 120 && tolstoiDiscussion.length >= 80 && essay.length >= 300 && evidence && verdictEvidence && aiDecision === 'APTO') {
     const bytes = new Uint8Array(4);
     crypto.getRandomValues(bytes);
     const code = `FIA1-PILOTO-${Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
@@ -158,6 +160,7 @@ function validateModule() {
   } else {
     const missing = [];
     if (score < 4) missing.push(`test (${score}/5; necesitas al menos 4)`);
+    if (!thinkingDone) missing.push('realizar y guardar el tiempo de pensamiento fuera de la web');
     if (reflection.length < 80) missing.push('reflexión de la conversación socrática (80 caracteres)');
     if (tolstoiNotes.length < 120 || tolstoiDiscussion.length < 80) missing.push('lectura y discusión de Tolstói');
     if (essay.length < 300) missing.push('ensayo (300 caracteres)');

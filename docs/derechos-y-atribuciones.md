@@ -20,6 +20,13 @@ MasterFIA enlaza y redistribuye materiales con una ficha de procedencia por obra
 
 Los vídeos se incrustan desde YouTube y no se redistribuyen en este repositorio. Si un vídeo deja de estar disponible, se sustituye por otro recurso con una función pedagógica equivalente y se actualiza la ficha del módulo.
 
+## Imágenes del módulo 1
+
+- `assets/images/socrates-bust.jpg`: fotografía de Luciusmichael, [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Bust_of_Socrates.JPG), dominio público.
+- `assets/images/ivan-ilich-1886.jpg`: fotografía de la primera edición de *The Death of Ivan Ilyich* (1886), [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:The_Death_of_Ivan_Ilyich.jpg), dominio público.
+
+El audiolibro se enlaza a YouTube y no se copia ni redistribuye en el repositorio.
+
 ## Regla editorial
 
 Conservar autoría, traductor, fuente, licencia y fecha de comprobación. Enlazar una obra no equivale a tener derecho a reproducirla: cada edición se revisa por separado.

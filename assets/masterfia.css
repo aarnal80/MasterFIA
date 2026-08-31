@@ -103,6 +103,12 @@ h1 em, h2 em { color: var(--acid); font-style: normal; }
 .lesson-card label span { color: var(--muted); font-size: .8rem; font-weight: 400; }
 textarea { width: 100%; margin-top: 8px; border: 1px solid var(--line); border-radius: 5px; background: rgba(9,12,18,.65); color: var(--text); padding: 12px; resize: vertical; }
 textarea:focus { border-color: var(--acid); outline: 2px solid rgba(223,255,114,.2); }
+.intro-details { margin: 18px 0; border: 1px solid var(--line); background: rgba(8,13,21,.48); }
+.intro-details summary { padding: 14px 16px; color: var(--cyan); cursor: pointer; font-weight: 700; }
+.intro-details > p, .intro-details > .art-figure { margin-inline: 16px; }
+.art-figure { margin-block: 0 18px; }
+.art-figure img { display: block; width: min(100%, 360px); max-height: 420px; object-fit: cover; border: 1px solid var(--line); }
+.art-figure figcaption { max-width: 58ch; margin-top: 8px; color: var(--muted); font-size: .76rem; line-height: 1.45; }
 .video-frame { margin: 21px 0 10px; aspect-ratio: 16 / 9; background: #05070a; }
 .video-frame iframe { width: 100%; height: 100%; border: 0; }
 .resource-link { display: inline-block; margin-bottom: 20px; font-size: .88rem; }
