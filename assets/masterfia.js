@@ -102,7 +102,7 @@ function validateModule() {
     result.innerHTML = `<strong>Módulo 1 validado en modo piloto.</strong><br>Resultado: ${score}/5 · Código local: <code>${code}</code><br><small>Este código no es todavía una certificación ni un bloqueo seguro: solo demuestra el flujo de prueba en este navegador.</small>`;
   } else {
     const missing = [];
-    if (score < 4) missing.push(`test (${score}/5; necesitas 4)}`.replace('}', ''));
+    if (score < 4) missing.push(`test (${score}/5; necesitas al menos 4)`);
     if (reflection.length < 80) missing.push('reflexión del diálogo (80 caracteres)');
     if (essay.length < 300) missing.push('tesis/esquema final (300 caracteres)');
     if (!evidence) missing.push('marcar que conservas la conversación');
