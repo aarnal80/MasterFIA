@@ -37,34 +37,27 @@ const essayPromptText = [
 ].join('\n');
 
 const storageKey = 'masterfia:modulo1';
-const fields = ['argument-map', 'dialogue-reflection', 'tolstoi-notes', 'tolstoi-discussion', 'final-essay', 'ai-declaration', 'ai-verdict'];
 let state = {};
 try { state = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch { state = {}; }
 
-function saveField(id, value) {
-  state[id] = value;
+function saveState(key, value) {
+  state[key] = value;
   localStorage.setItem(storageKey, JSON.stringify(state));
   updateProgress();
 }
 
-function extractAIDecision(value) {
-  const matches = [...String(value || '').matchAll(/DECISI[ÓO]N\s*:\s*(APTO|REVISAR)\b/gi)];
-  return matches.length ? matches[matches.length - 1][1].toUpperCase() : '';
-}
-
 function updateProgress() {
   const evidence = [
-    Boolean(state.thinkingDone),
-    Boolean((state['argument-map'] || '').trim()),
-    Boolean((state['dialogue-reflection'] || '').trim() && state.chatEvidence),
-    Boolean((state['tolstoi-notes'] || '').trim() && (state['tolstoi-discussion'] || '').trim()),
-    Boolean((state['final-essay'] || '').trim() && extractAIDecision(state['ai-verdict']) === 'APTO' && state.aiVerdictEvidence)
+    Boolean(state.apologiaDone),
+    Boolean(state.chatEvidence),
+    Boolean(state.tolstoiDone),
+    Boolean(state.aiVerdictEvidence)
   ];
   const completed = evidence.filter(Boolean).length;
   const bar = document.querySelector('#progress-bar');
   const label = document.querySelector('#progress-label');
-  if (bar) bar.style.width = `${completed * 20}%`;
-  if (label) label.textContent = `${completed} de 5 evidencias`;
+  if (bar) bar.style.width = (completed * 25) + '%';
+  if (label) label.textContent = completed + ' de 4 entregas';
 }
 
 function makeQuiz() {
@@ -77,12 +70,16 @@ function makeQuiz() {
     ['q4', 'La novela de Tolstói sirve en este módulo principalmente para:', [['a', 'Probar que la enfermedad es un castigo'], ['b', 'Observar la distancia entre éxito social y vida asumida'], ['c', 'Sustituir la argumentación por emociones']]],
     ['q5', 'Una buena objeción filosófica debe:', [['a', 'Atacar la premisa más importante con razones'], ['b', 'Repetir la tesis contraria'], ['c', 'Apelar a la mayoría']]]
   ];
-  mount.innerHTML = '<p class="quiz-title">Comprobación breve (5 preguntas)</p>' + questions.map(([id, text, options]) => `<fieldset><legend>${text}</legend>${options.map(([value, label]) => `<label class="quiz-option"><input type="radio" name="${id}" value="${value}"> ${label}</label>`).join('')}</fieldset>`).join('');
-  mount.querySelectorAll('input').forEach(input => input.addEventListener('change', () => saveField(input.name, input.value)));
+  const html = questions.map(([id, text, options]) => {
+    const optionHtml = options.map(([value, label]) => '<label class="quiz-option"><input type="radio" name="' + id + '" value="' + value + '"> ' + label + '</label>').join('');
+    return '<fieldset><legend>' + text + '</legend>' + optionHtml + '</fieldset>';
+  }).join('');
+  mount.innerHTML = '<p class="quiz-title">Comprobación breve (5 preguntas)</p>' + html;
+  mount.querySelectorAll('input').forEach(input => input.addEventListener('change', () => saveState(input.name, input.value)));
   questions.forEach(([id]) => {
     const answer = state[id];
     if (answer) {
-      const input = mount.querySelector(`input[name="${id}"][value="${answer}"]`);
+      const input = mount.querySelector('input[name="' + id + '"][value="' + answer + '"]');
       if (input) input.checked = true;
     }
   });
@@ -92,11 +89,7 @@ function bindCheckbox(id, stateKey) {
   const checkbox = document.getElementById(id);
   if (!checkbox) return;
   checkbox.checked = Boolean(state[stateKey]);
-  checkbox.addEventListener('change', () => {
-    state[stateKey] = checkbox.checked;
-    localStorage.setItem(storageKey, JSON.stringify(state));
-    updateProgress();
-  });
+  checkbox.addEventListener('change', () => saveState(stateKey, checkbox.checked));
 }
 
 function bindCopyButton(buttonId, text) {
@@ -114,14 +107,9 @@ function bindCopyButton(buttonId, text) {
 }
 
 function hydrate() {
-  fields.forEach(id => {
-    const element = document.getElementById(id);
-    if (!element) return;
-    if (typeof state[id] === 'string') element.value = state[id];
-    element.addEventListener('input', () => saveField(id, element.value));
-  });
+  bindCheckbox('apologia-done', 'apologiaDone');
   bindCheckbox('chat-evidence', 'chatEvidence');
-  bindCheckbox('thinking-done', 'thinkingDone');
+  bindCheckbox('tolstoi-done', 'tolstoiDone');
   bindCheckbox('ai-verdict-evidence', 'aiVerdictEvidence');
   const prompt = document.getElementById('prompt-text');
   if (prompt) prompt.textContent = dialoguePromptText;
@@ -137,39 +125,27 @@ function validateModule() {
   const result = document.getElementById('validation-result');
   const answers = ['q1', 'q2', 'q3', 'q4', 'q5'];
   const correct = ['b', 'b', 'c', 'b', 'a'];
-  const score = answers.reduce((total, id, index) => total + (document.querySelector(`input[name="${id}"]:checked`)?.value === correct[index] ? 1 : 0), 0);
-  const reflection = (state['dialogue-reflection'] || '').trim();
-  const tolstoiNotes = (state['tolstoi-notes'] || '').trim();
-  const tolstoiDiscussion = (state['tolstoi-discussion'] || '').trim();
-  const essay = (state['final-essay'] || '').trim();
-  const verdict = (state['ai-verdict'] || '').trim();
-  const aiDecision = extractAIDecision(verdict);
-  const evidence = Boolean(state.chatEvidence);
-  const thinkingDone = Boolean(state.thinkingDone);
-  const verdictEvidence = Boolean(state.aiVerdictEvidence);
-  if (score >= 4 && thinkingDone && reflection.length >= 80 && tolstoiNotes.length >= 120 && tolstoiDiscussion.length >= 80 && essay.length >= 300 && evidence && verdictEvidence && aiDecision === 'APTO') {
+  const score = answers.reduce((total, id, index) => total + (document.querySelector('input[name="' + id + '"]:checked')?.value === correct[index] ? 1 : 0), 0);
+  const evidence = [
+    ['apologiaDone', 'lectura y mapa argumental de la Apología'],
+    ['chatEvidence', 'conversación socrática con la IA'],
+    ['tolstoiDone', 'lectura y discusión de Tolstói'],
+    ['aiVerdictEvidence', 'ensayo, conversación final y veredicto de la IA']
+  ];
+  const missing = evidence.filter(([key]) => !state[key]).map(([, label]) => label);
+  if (score >= 4 && missing.length === 0) {
     const bytes = new Uint8Array(4);
     crypto.getRandomValues(bytes);
-    const code = `FIA1-PILOTO-${Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase()}`;
+    const code = 'FIA1-PILOTO-' + Array.from(bytes, byte => byte.toString(16).padStart(2, '0')).join('').toUpperCase();
     state.passed = true;
     state.pilotCode = code;
-    state.aiDecision = aiDecision;
     localStorage.setItem(storageKey, JSON.stringify(state));
     result.className = 'validation-result success';
-    result.innerHTML = `<strong>Módulo 1 validado: la IA ha decidido APTO.</strong><br>Test: ${score}/5 · Código local: <code>${code}</code><br><small>Este código no es todavía una certificación ni un bloqueo seguro: solo registra el flujo de prueba en este navegador.</small>`;
+    result.innerHTML = '<strong>Módulo 1 completado.</strong><br>Test: ' + score + '/5 · Código local: <code>' + code + '</code><br><small>Este código solo registra el flujo de prueba en este navegador.</small>';
   } else {
-    const missing = [];
-    if (score < 4) missing.push(`test (${score}/5; necesitas al menos 4)`);
-    if (!thinkingDone) missing.push('realizar y guardar el tiempo de pensamiento fuera de la web');
-    if (reflection.length < 80) missing.push('reflexión de la conversación socrática (80 caracteres)');
-    if (tolstoiNotes.length < 120 || tolstoiDiscussion.length < 80) missing.push('lectura y discusión de Tolstói');
-    if (essay.length < 300) missing.push('ensayo (300 caracteres)');
-    if (!evidence) missing.push('conservar la conversación sobre la Apología');
-    if (!verdictEvidence) missing.push('conservar la conversación del tribunal de IA');
-    if (aiDecision === 'REVISAR') missing.push('la IA ha emitido REVISAR: revisa el ensayo y vuelve a conversar');
-    else if (aiDecision !== 'APTO') missing.push('un veredicto explícito «DECISIÓN: APTO» de la IA');
+    if (score < 4) missing.unshift('test (' + score + '/5; necesitas al menos 4)');
     result.className = 'validation-result retry';
-    result.textContent = `Aún no está listo. Revisa: ${missing.join(', ')}.`;
+    result.textContent = 'Aún no está listo. Revisa: ' + missing.join(', ') + '.';
   }
 }
 
