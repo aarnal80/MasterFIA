@@ -73,9 +73,14 @@ h1 em, h2 em { color: var(--brand); font-style: normal; }
 .lede { max-width: 660px; color: var(--muted); font-size: 1.15rem; }
 .hero-actions { display: flex; gap: 22px; flex-wrap: wrap; align-items: center; margin-top: 34px; }
 .hero-note { border: 1px solid var(--line); padding: 32px; background: var(--paper); box-shadow: var(--shadow); }
+.hero-note h2 { margin: 0 0 22px; font-size: clamp(1.7rem, 2.6vw, 2.3rem); }
 .quote-mark { display: block; color: var(--cyan); font: 5rem/.7 Georgia, serif; }
-.hero-note p { margin: 8px 0 14px; font: 700 clamp(1.5rem, 3vw, 2.15rem)/1.08 var(--display); letter-spacing: -.04em; }
+.hero-note p:not(.eyebrow) { margin: 8px 0 14px; font: 700 clamp(1.5rem, 3vw, 2.15rem)/1.08 var(--display); letter-spacing: -.04em; }
 .hero-note small { color: var(--muted); }
+.hero-facts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.hero-facts li { display: grid; grid-template-columns: 100px 1fr; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.hero-facts strong { color: var(--brand); font: 700 .7rem/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.hero-facts span { color: var(--muted); font-size: .9rem; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .stats div { display: grid; gap: 4px; padding: 25px 18px; border-right: 1px solid var(--line); }
 .stats div:first-child { padding-left: 0; }
@@ -93,13 +98,33 @@ h1 em, h2 em { color: var(--brand); font-style: normal; }
 .method-grid p { color: var(--muted); margin-bottom: 0; font-size: .94rem; }
 .section-paper { background: var(--paper); color: var(--ink); padding: 80px 50px; }
 .section-paper .eyebrow { color: var(--cyan); }
-.program-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+.program-layout { display: block; }
 .program-list { border-top: 1px solid var(--dark-line); }
 .program-list > div { display: grid; grid-template-columns: 45px 1fr; gap: 18px; align-items: center; padding: 19px 0; border-bottom: 1px solid var(--dark-line); }
 .program-list > div > span { color: var(--ink-muted); font: .85rem var(--mono); }
 .program-list p { margin: 0; display: grid; gap: 4px; }
 .program-list strong { font-size: 1rem; }
 .program-list small { color: var(--muted); }
+.program-item { border-bottom: 1px solid var(--dark-line); }
+.program-item summary { display: grid; grid-template-columns: 45px 1fr; gap: 18px; align-items: center; padding: 19px 0; cursor: pointer; list-style: none; }
+.program-item summary::-webkit-details-marker { display: none; }
+.program-item summary::after { content: "+"; justify-self: end; color: var(--brand); font: 1.4rem/1 var(--mono); }
+.program-item[open] summary::after { content: "−"; }
+.program-item summary > span:first-child { color: var(--ink-muted); font: .85rem var(--mono); }
+.program-summary { display: grid; gap: 4px; }
+.program-summary strong { font-size: 1rem; }
+.program-summary small { color: var(--muted); }
+.program-modules { display: grid; gap: 8px; padding: 0 0 18px 63px; }
+.program-module { display: grid; grid-template-columns: 34px 1fr auto; gap: 12px; align-items: center; padding: 12px 14px; color: var(--ink); text-decoration: none; background: rgba(255,255,255,.55); border: 1px solid var(--dark-line); }
+.program-module:hover { border-color: var(--brand); }
+.program-module-number { color: var(--brand); font: .72rem var(--mono); }
+.program-module > span:nth-child(2) { display: grid; gap: 3px; }
+.program-module strong { font-size: .94rem; font-weight: 700; }
+.program-module small { color: var(--muted); font-size: .82rem; }
+.program-module-arrow { color: var(--brand); font-size: 1.1rem; }
+.program-module.is-locked { cursor: default; opacity: .72; }
+.program-module.is-locked:hover { border-color: var(--dark-line); }
+.program-lock { color: var(--muted); font: .65rem var(--mono); letter-spacing: .06em; text-transform: uppercase; }
 .module-card { padding: 32px; background: var(--paper); color: var(--ink); border: 1px solid var(--line); box-shadow: var(--shadow); }
 .module-card h3 { margin: 0 0 12px; font: 700 2rem/1.05 var(--display); letter-spacing: -.045em; }
 .module-card > p:not(.eyebrow) { color: var(--muted); }
