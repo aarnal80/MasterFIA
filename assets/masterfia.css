@@ -213,7 +213,7 @@ summary { cursor: pointer; color: var(--brand); }
 .side-column { display: grid; gap: 16px; position: sticky; top: 20px; }
 .side-card { padding: 22px; border: 1px solid var(--line); background: var(--paper); box-shadow: var(--shadow); }
 .side-card h3 { margin-bottom: 10px; color: var(--ink); font: 700 1.35rem/1.1 var(--display); letter-spacing: -.035em; }
-.side-card > a:not(.outline-link) { display: block; margin: 12px 0; color: var(--brand); text-decoration: none; }
+.side-card > a:not(.outline-link):not(.button) { display: block; margin: 12px 0; color: var(--brand); text-decoration: none; }
 .side-card ul { padding-left: 20px; color: var(--muted); }
 .locked-card { border-color: #bfd2ef; background: #f3f7fd; }
 
